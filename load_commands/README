@@ -1,0 +1,14 @@
+```bash
+#download json to PC from Shell
+cloud cloud-shell scp cloudshell:~/jsons_bellabeat/weight_log_schema.json localhost:/Users/monica.ghavalyan/sql_task/jsons/
+
+#upload json from PC to Shell
+gcloud cloud-shell scp localhost:/Users/monica.ghavalyan/sql_task/jsons/daily_activity_schema.json cloudshell:~/jsons_bellabeat/
+
+#load csv data to BigQuery tables
+bq load --source_format=CSV \
+--skip_leading_rows=1 \
+--schema=/Users/monica.ghavalyan/sql_task/jsons/hourly_calories_schema.json \
+my_bellabeat_dataset.hourly_calories \
+gs://my_bellabeat_bucket/hourlyCalories_merged.csv
+```
