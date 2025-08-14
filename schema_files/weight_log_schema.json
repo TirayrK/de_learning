@@ -1,0 +1,35 @@
+[
+  {
+    "name": "Id",
+    "type": "INT64"
+  },
+  {
+    "name": "Date",
+    "type": "STRING"
+  },
+  {
+    "name": "WeightKg",
+    "type": "FLOAT64"
+  },
+  {
+    "name": "WeightPounds",
+    "type": "FLOAT64"
+  },
+  {
+    "name": "Fat",
+    "type": "FLOAT64"
+  },
+  {
+    "name": "BMI",
+    "type": "FLOAT64"
+  },
+  {
+    "name": "IsManualReport",
+    "type": "BOOL"
+  },
+  {
+    "name": "LogId",
+    "type": "INT64"
+  }
+]
+

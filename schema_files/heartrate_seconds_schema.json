@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Id",
+    "type": "INT64"
+  },
+  {
+    "name": "Time",
+    "type": "STRING"
+  },
+  {
+    "name": "Value",
+    "type": "INT64"
+  }
+]

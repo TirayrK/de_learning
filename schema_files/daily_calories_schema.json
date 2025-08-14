@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Id",
+    "type": "INT64"
+  },
+  {
+    "name": "ActivityDay",
+    "type": "STRING"
+  },
+  {
+    "name": "Calories",
+    "type": "INT64"
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Id",
+    "type": "INT64"
+  },
+  {
+    "name": "SleepDay",
+    "type": "STRING"
+  },
+  {
+    "name": "TotalSleepRecords",
+    "type": "INT64"
+  },
+  {
+    "name": "TotalMinutesAsleep",
+    "type": "INT64"
+  },
+  {
+    "name": "TotalTimeInBed",
+    "type": "INT64"
+  }
+]

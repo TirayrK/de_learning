@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Id",
+    "type": "INT64"
+  },
+  {
+    "name": "ActivityDay",
+    "type": "STRING"
+  },
+  {
+    "name": "SedentaryMinutes",
+    "type": "INT64"
+  },
+  {
+    "name": "LightlyActiveMinutes",
+    "type": "INT64"
+  },
+  {
+    "name": "FairlyActiveMinutes",
+    "type": "INT64"
+  },
+  {
+    "name": "VeryActiveMinutes",
+    "type": "INT64"
+  },
+  {
+    "name": "SedentaryActiveDistance",
+    "type": "FLOAT64"
+  },
+  {
+    "name": "LightActiveDistance",
+    "type": "FLOAT64"
+  },
+  {
+    "name": "ModeratelyActiveDistance",
+    "type": "FLOAT64"
+  },
+  {
+    "name": "VeryActiveDistance",
+    "type": "FLOAT64"
+  }
+]

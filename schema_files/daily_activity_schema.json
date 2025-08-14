@@ -1,0 +1,62 @@
+[
+  {
+    "name": "Id",
+    "type": "INT64"
+  },
+  {
+    "name": "ActivityDay",
+    "type": "STRING"
+  },
+  {
+    "name": "TotalSteps",
+    "type": "INT64"
+  },
+  {
+    "name": "TotalDistance",
+    "type": "FLOAT64"
+  },
+  {
+    "name": "TrackerDistance",
+    "type": "FLOAT64"
+  },
+  {
+    "name": "LoggedActivitiesDistance",
+    "type": "FLOAT64"
+  },
+  {
+    "name": "VeryActiveDistance",
+    "type": "FLOAT64"
+  },
+  {
+    "name": "ModeratelyActiveDistance",
+    "type": "FLOAT64"
+  },
+  {
+    "name": "LightActiveDistance",
+    "type": "FLOAT64"
+  },
+  {
+    "name": "SedentaryActiveDistance",
+    "type": "FLOAT64"
+  },
+  {
+    "name": "VeryActiveMinutes",
+    "type": "INT64"
+  },
+  {
+    "name": "FairlyActiveMinutes",
+    "type": "INT64"
+  },
+  {
+    "name": "LightlyActiveMinutes",
+    "type": "INT64"
+  },
+  {
+    "name": "SedentaryMinutes",
+    "type": "INT64"
+  },
+  {
+    "name": "Calories",
+    "type": "INT64"
+  }
+]

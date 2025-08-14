@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Id",
+    "type": "INT64"
+  },
+  {
+    "name": "ActivityHour",
+    "type": "STRING"
+  },
+  {
+    "name": "StepTotal",
+    "type": "INT64"
+  }
+]
