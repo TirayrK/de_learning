@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sales Report - {{ region }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        h1 { color: #4285f4; }
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .summary { background-color: #f9f9f9; padding: 15px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Sales Report for {{ region }}</h1>
+
+    <div class="summary">
+        <p><strong>Report Generated:</strong> {{ generation_date }}</p>
+        <p><strong>Total Records:</strong> {{ total_records }}</p>
+        <p><strong>Total Sales:</strong> ${{ total_amount }}</p>
+    </div>
+
+    {% if data %}
+    <table>
+        <tr>
+            <th>Product Category</th>
+            <th>Region</th>
+            <th>Date</th>
+            <th>Amount</th>
+        </tr>
+        {% for row in data %}
+        <tr>
+            <td>{{ row.product_category }}</td>
+            <td>{{ row.sales_region }}</td>
+            <td>{{ row.sale_date }}</td>
+            <td>${{ row.sale_amount }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p><strong>No data found for region: {{ region }}</strong></p>
+    {% endif %}
+</body>
+</html>
