@@ -188,7 +188,7 @@ pip install mysql-connector-python Faker
 # Create the insert_data.py script
 nano insert_data.py
 
-# COPY CODE FROM insert_data_vm.py FROM THE PROJECT AND PASTE
+# COPY CODE FROM insert_data.py FROM THE PROJECT AND PASTE
 # Save and exit the editor (if using nano: Ctrl+X, Y, Enter)
 
 # Create MySQL client configuration file with credentials
@@ -197,17 +197,31 @@ cat > ~/.my.cnf << 'EOF'
 user = app_user
 password = app_password_123
 host = localhost
+database = inventory
 EOF
 
-# Set secure permissions on the config file (only user can read/write)
-chmod 600 ~/.my.cnf
+# Also create Cloud SQL config file early (for future use)
+cat > ~/.my_cloudsql.cnf << 'EOF'
+[client]
+host = PLACEHOLDER_CLOUD_SQL_IP
+port = 3306
+user = datastream_user
+password = datastream_password_123
+database = inventory
+EOF
 
-# Test the script
+# Set secure permissions on both config files
+chmod 600 ~/.my.cnf
+chmod 600 ~/.my_cloudsql.cnf
+
+# Test the script with VM config
+python3 insert_data.py ~/.my.cnf
+
+# Test the script with default config (should be same result)
 python3 insert_data.py
 
 # Verify data was inserted
 mysql --defaults-file=~/.my.cnf -e "USE inventory; SELECT COUNT(*) FROM products;"
-
 
 # 2.3
 
@@ -217,7 +231,7 @@ crontab -e
 # When the editor opens, add this line at the bottom:
 
 # Run insert_data.py every 5 minutes and log output
-*/5 * * * * /usr/bin/python3 /home/$USER/insert_data.py >> /home/$USER/cron.log 2>&1
+*/5 * * * * /usr/bin/python3 /home/$USER/insert_data.py ~/.my.cnf >> /home/$USER/cron.log 2>&1
 
 # Save and exit the editor (if using nano: Ctrl+X, Y, Enter)
 
@@ -308,7 +322,7 @@ gcloud dataflow jobs run mysql-to-bigquery-stream \
   --region us-central1 \
   --parameters \
 inputTopic=projects/YOUR_PROJECT_ID/topics/mysql-cdc-events.inventory.products,\
-outputTableSpec=YOUR_PROJECT_ID:inventory_dataset.products,\
+outputTableSpec=YOUR_PROJECT_ID:inventory.products,\
 javascriptTextTransformGcsPath=gs://YOUR_PROJECT_ID-dataflow-functions/transform.js,\
 javascriptTextTransformFunctionName=transform
 
@@ -317,6 +331,6 @@ gcloud dataflow jobs list --region=us-central1 --status=active
 
 # Check if data is flowing into BigQuery
 bq query --use_legacy_sql=false \
-"SELECT COUNT(*) as total_records FROM \`YOUR_PROJECT_ID.inventory_dataset.products\`"
+"SELECT COUNT(*) as total_records FROM \`YOUR_PROJECT_ID.inventory.products\`"
 
 # For having synchronized data, clear both tables data and let the script and dataflow job run.

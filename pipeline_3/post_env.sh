@@ -31,6 +31,11 @@ gcloud sql instances create mysql-destination \
   --backup-start-time=03:00 \
   --enable-bin-log
 
+# RUN in VM SSH
+# Update the Cloud SQL config with actual IP (add this after Cloud SQL creation)
+CLOUD_SQL_IP=$(gcloud sql instances describe mysql-destination --format="value(ipAddresses[0].ipAddress)")
+sed -i "s/PLACEHOLDER_CLOUD_SQL_IP/$CLOUD_SQL_IP/g" ~/.my_cloudsql.cnf
+
 # Set root password for Cloud SQL instance
 gcloud sql users set-password root \
   --host=% \
@@ -113,6 +118,9 @@ gcloud database migration migration-jobs create mysql-cloudsql \
 
 # 5.1
 
+# Create BigQuery dataset for Datastream
+bq mk --dataset --location=US post_inventory
+
 # Create private connectivity configuration for Datastream
 gcloud datastream private-connections create private-config \
   --location=us-central1 \
@@ -145,27 +153,15 @@ gcloud datastream streams create my-stream \
   --destination-connection-profile=destination-profile \
   --mysql-source-config-include-objects-mysql-databases=inventory \
   --mysql-source-config-include-objects-mysql-tables=inventory.products \
-  --bigquery-destination-config-source-hierarchy-datasets-dataset-id=inventory_dataset \
+  --bigquery-destination-config-source-hierarchy-datasets-dataset-id=post_inventory \
   --bigquery-destination-config-data-freshness=900 \
   --no-start
 
 # For making changes in insert_data.py in future
 
-Run in VM SSH
-# Create a separate config file for Cloud SQL connection
-nano ~/.my_cloudsql.cnf
-
-[client]
-host = 10.24.80.7
-port = 3306
-user = datastream
-password = your_actual_password
-database = inventory
-
-chmod 600 ~/.my_cloudsql.cnf
-
 
 # Final steps to run the project
+Run in VM SSH
 
 # Start the DMS migration job (local terminal)
 gcloud database migration migration-jobs start mysql-cloudsql \
@@ -178,15 +174,11 @@ gcloud database migration migration-jobs describe mysql-cloudsql \
 # Stop the cron job by commenting it out (VM SSH)
 crontab -e
 # Comment out the line like this:
-# */5 * * * * /usr/bin/python3 /home/$USER/insert_data.py >> /home/$USER/cron.log 2>&1
+# */5 * * * * /usr/bin/python3 /home/$USER/insert_data.py ~/.my.cnf >> /home/$USER/cron.log 2>&1
 
 # Promote Cloud SQL instance (stops replication) (local terminal)
 gcloud database migration migration-jobs promote mysql-cloudsql \
   --region=us-central1
-
-# Copy code from data_insert_cloudsql.py in project files (VM SSH)
-nano ~/insert_data.py
-# Replace content with Cloud SQL connection details
 
 # Start the Datastream pipeline (local terminal)
 gcloud datastream streams start my-stream --location=us-central1
@@ -196,9 +188,10 @@ gcloud datastream streams describe my-stream --location=us-central1
 
 # Re-enable the cron job (VM SSH)
 crontab -e
-# Uncomment the line:
-# */5 * * * * /usr/bin/python3 /home/$USER/insert_data.py >> /home/$USER/cron.log 2>&1
+
+# Run this code
+*/5 * * * * /usr/bin/python3 /home/$USER/insert_data.py ~/.my_cloudsql.cnf >> /home/$USER/cron.log 2>&1
 
 # Verify data flows to BigQuery through Datastream (local terminal)
 bq query --use_legacy_sql=false \
-"SELECT COUNT(*) FROM \`YOUR_PROJECT_ID.inventory_dataset.products_from_datastream\`"
+"SELECT COUNT(*) FROM \`YOUR_PROJECT_ID.post_inventory.products\`"
