@@ -1,0 +1,6 @@
+{
+  "domain_code": "string",
+  "page_title": "string",
+  "count_views": "long",
+  "total_response_size": "integer"
+}
