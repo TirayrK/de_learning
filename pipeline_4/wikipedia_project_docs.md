@@ -63,16 +63,17 @@ Each file contains space-separated records:
 
 The `process_wiki_views.py` script handles the data transformation:
 
-1. **File Reading**: Loads all 24 hourly files simultaneously using Spark's distributed reading
-2. **Filtering**: Keeps only English Wikipedia records (`en` and `en.m` domains)
-3. **Aggregation**: Groups records by article title and sums view counts across all hours
-4. **Ranking**: Sorts articles by total views and selects top 10
-5. **Output**: Saves results as Parquet files with processing date added
+1. **Schema Loading**: Reads data schema from external schema.json configuration file
+2. **File Reading**: Loads all 24 hourly files simultaneously using Spark's distributed reading
+3. **Filtering**: Keeps only English Wikipedia records (`en` and `en.m` domains)
+4. **Aggregation**: Groups records by article title and sums view counts across all hours
+5. **Ranking**: Sorts articles by total views and selects top 10
+6. **Output**: Saves results as Parquet files with processing date added
 
 Key features:
 - Handles compressed .gz files automatically
 - Validates data quality (checks for empty files)
-- Provides detailed logging for troubleshooting
+- Uses Python logging framework for production-ready logging
 - Uses efficient columnar storage format
 
 ### Workflow Orchestration (Airflow DAG)
@@ -85,6 +86,7 @@ The `wikipedia_pipeline_dag.py` manages the complete workflow:
 - Streams data directly to Cloud Storage without local storage
 
 **Task 2: Create Cluster**
+- Loads cluster configuration from external cluster_config.json file
 - Provisions ephemeral Dataproc cluster (1 master + 2 workers)
 - Uses n1-standard-2 machines (2 vCPU, 7.5GB RAM each)
 - Configures automatic deletion after 5000 seconds idle time
@@ -154,6 +156,11 @@ COMPOSER_BUCKET=$(gcloud composer environments describe my-composer \
 
 # Upload PySpark script
 gsutil cp process_wiki_views.py ${COMPOSER_BUCKET%/dags}/scripts/
+
+# Create schemas folder and upload configuration files
+gsutil mkdir ${COMPOSER_BUCKET%/dags}/schemas/
+gsutil cp schema.json ${COMPOSER_BUCKET%/dags}/schemas/
+gsutil cp cluster_config.json ${COMPOSER_BUCKET%/dags}/schemas/
 ```
 
 **2. Upload Workflow Definition**

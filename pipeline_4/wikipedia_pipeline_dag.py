@@ -3,10 +3,12 @@ Wikipedia Hourly Pageviews Analytics Pipeline
 Complete Airflow DAG for processing Wikipedia pageview data daily
 """
 
+import json
 import logging
 import subprocess
 from datetime import datetime, timedelta
 from airflow import DAG
+from google.cloud import storage
 from airflow.operators.dummy import DummyOperator
 from airflow.operators.python import PythonOperator
 from airflow.providers.google.cloud.operators.dataproc import (
@@ -36,30 +38,18 @@ DATAPROC_STAGING_BUCKET = "project4-dataproc-staging"
 PYSPARK_SCRIPT_URI = "gs://us-central1-my-composer-82fad1a3-bucket/scripts/process_wiki_views.py"
 
 # Dataproc cluster configuration
-CLUSTER_CONFIG = {
-    "master_config": {
-        "num_instances": 1,
-        "machine_type_uri": "n1-standard-2",
-        "disk_config": {"boot_disk_type": "pd-standard", "boot_disk_size_gb": 50},
-    },
-    "worker_config": {
-        "num_instances": 2,
-        "machine_type_uri": "n1-standard-2",
-        "disk_config": {"boot_disk_type": "pd-standard", "boot_disk_size_gb": 50},
-    },
-    "software_config": {
-        "image_version": "2.0-debian10"
-    },
-    "lifecycle_config": {
-        "idle_delete_ttl": {"seconds": 5000}
-    }
-}
+def load_cluster_config():
+    client = storage.Client()
+    bucket = client.bucket("us-central1-my-composer-82fad1a3-bucket")
+    blob = bucket.blob("schemas/cluster_config.json")
+    return json.loads(blob.download_as_text())
+
+CLUSTER_CONFIG = load_cluster_config()
 
 def download_wikipedia_files(**context):
     """
     Download 24 hourly Wikipedia pageview files for the given date
     """
-    from datetime import datetime, timedelta
 
     # Check if manual date provided via DAG config
     dag_run_conf = context.get('dag_run').conf or {}
