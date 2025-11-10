@@ -1,0 +1,16 @@
+{
+  "region": "us-central1",
+  "zone": "us-central1-a",
+  "staging_bucket": "sada-tirayr-sentiment-staging",
+  "output_bucket": "sada-tirayr-sentiment-output",
+  "dataset_id": "sentiment_analysis",
+  "cluster": {
+    "master_machine_type": "e2-standard-4",
+    "master_boot_disk_size": 50,
+    "num_workers": 2,
+    "worker_machine_type": "e2-standard-4",
+    "worker_boot_disk_size": 50,
+    "image_version": "2.1-debian11",
+    "max_idle": "600s"
+  }
+}
