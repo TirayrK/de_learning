@@ -9,15 +9,20 @@ resource "google_project_iam_member" "dataproc_worker" {
   member  = "serviceAccount:${google_service_account.dataproc_sa.email}"
 }
 
-resource "google_storage_bucket_iam_member" "staging_bucket_read" {
-  bucket = google_storage_bucket.staging_bucket.name
-  role   = "roles/storage.objectViewer"
-  member = "serviceAccount:${google_service_account.dataproc_sa.email}"
-}
+resource "google_storage_bucket_iam_member" "bucket_access" {
+  for_each = {
+    staging = {
+      bucket = google_storage_bucket.staging_bucket.name
+      role   = "roles/storage.objectViewer"
+    }
+    output = {
+      bucket = google_storage_bucket.output_bucket.name
+      role   = "roles/storage.objectAdmin"
+    }
+  }
 
-resource "google_storage_bucket_iam_member" "output_bucket_write" {
-  bucket = google_storage_bucket.output_bucket.name
-  role   = "roles/storage.objectAdmin"
+  bucket = each.value.bucket
+  role   = each.value.role
   member = "serviceAccount:${google_service_account.dataproc_sa.email}"
 }
 
