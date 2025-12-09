@@ -1,0 +1,30 @@
+{
+  "gce_cluster_config": {
+    "internal_ip_only": true,
+    "service_account_scopes": ["https://www.googleapis.com/auth/cloud-platform"],
+    "shielded_instance_config": {
+      "enable_secure_boot": true,
+      "enable_vtpm": true,
+      "enable_integrity_monitoring": true
+    }
+  },
+  "master_config": {
+    "num_instances": 1,
+    "machine_type_uri": "e2-standard-4",
+    "disk_config": {
+      "boot_disk_type": "pd-standard",
+      "boot_disk_size_gb": 100
+    }
+  },
+  "worker_config": {
+    "num_instances": 2,
+    "machine_type_uri": "e2-standard-4",
+    "disk_config": {
+      "boot_disk_type": "pd-standard",
+      "boot_disk_size_gb": 100
+    }
+  },
+  "software_config": {
+    "image_version": "2.2-ubuntu22"
+  }
+}
