@@ -155,7 +155,7 @@ with DAG(
         project_id=pipeline_config.project_id,
         region=pipeline_config.region,
         cluster_name=pipeline_config.cluster_name,
-        trigger_rule='all_done'
+        trigger_rule='none_skipped'
     )
 
     cleanup_files = GCSToGCSOperator(
@@ -165,12 +165,12 @@ with DAG(
         destination_bucket=pipeline_config.staging_bucket,
         destination_object='data/processed/',
         move_object=True,
-        trigger_rule='none_failed_min_one_success'
+        trigger_rule='all_success'
     )
 
     end = EmptyOperator(
         task_id='end',
-        trigger_rule='none_failed_min_one_success'
+        trigger_rule='all_success'
     )
 
     wait_for_files >> [create_reviews_table, create_summary_table] >> validate_input >> create_cluster

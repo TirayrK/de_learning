@@ -12,7 +12,7 @@ from typing import List
 from google.cloud import storage
 from pyspark.sql import SparkSession, DataFrame
 from pyspark.sql.functions import (
-    udf, col, count, when, avg, round as spark_round, lit, input_file_name, regexp_extract
+    udf, col, count, when, avg, round as spark_round, lit, input_file_name, regexp_extract, from_unixtime
 )
 from pyspark.sql.types import StringType, FloatType
 from pyspark.sql.functions import pandas_udf
@@ -108,6 +108,11 @@ class DataReader:
 
         try:
             df = self.spark.read.csv(paths, header=True, inferSchema=True)
+
+            df = df.withColumn("Score", col("Score").cast("integer")) \
+                .withColumn("Time", from_unixtime(col("Time")).cast("timestamp")) \
+                .withColumn("HelpfulnessNumerator", col("HelpfulnessNumerator").cast("integer")) \
+                .withColumn("HelpfulnessDenominator", col("HelpfulnessDenominator").cast("integer"))
 
             df = df.withColumn(
                 "source_filename",
