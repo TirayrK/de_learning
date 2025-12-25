@@ -1,0 +1,19 @@
+[
+  {"name": "source_filename", "type": "STRING", "mode": "NULLABLE"},
+  {"name": "product_id", "type": "STRING", "mode": "NULLABLE"},
+  {"name": "total_number_of_reviews", "type": "INTEGER", "mode": "NULLABLE"},
+  {"name": "avg_sentiment_score", "type": "FLOAT", "mode": "NULLABLE"},
+  {"name": "avg_review_score", "type": "FLOAT", "mode": "NULLABLE"},
+  {"name": "pct_without_text_review", "type": "FLOAT", "mode": "NULLABLE"},
+  {"name": "very_satisfied_pct", "type": "FLOAT", "mode": "NULLABLE"},
+  {"name": "somewhat_satisfied_pct", "type": "FLOAT", "mode": "NULLABLE"},
+  {"name": "neutral_pct", "type": "FLOAT", "mode": "NULLABLE"},
+  {"name": "somewhat_dissatisfied_pct", "type": "FLOAT", "mode": "NULLABLE"},
+  {"name": "very_dissatisfied_pct", "type": "FLOAT", "mode": "NULLABLE"},
+  {"name": "pct_without_score_review", "type": "FLOAT", "mode": "NULLABLE"},
+  {"name": "score_5_pct", "type": "FLOAT", "mode": "NULLABLE"},
+  {"name": "score_4_pct", "type": "FLOAT", "mode": "NULLABLE"},
+  {"name": "score_3_pct", "type": "FLOAT", "mode": "NULLABLE"},
+  {"name": "score_2_pct", "type": "FLOAT", "mode": "NULLABLE"},
+  {"name": "score_1_pct", "type": "FLOAT", "mode": "NULLABLE"}
+]

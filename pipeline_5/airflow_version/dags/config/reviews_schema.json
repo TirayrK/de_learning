@@ -1,0 +1,15 @@
+[
+  {"name": "source_filename", "type": "STRING", "mode": "NULLABLE"},
+  {"name": "Id", "type": "INTEGER", "mode": "NULLABLE"},
+  {"name": "ProductId", "type": "STRING", "mode": "NULLABLE"},
+  {"name": "UserId", "type": "STRING", "mode": "NULLABLE"},
+  {"name": "ProfileName", "type": "STRING", "mode": "NULLABLE"},
+  {"name": "HelpfulnessNumerator", "type": "INTEGER", "mode": "NULLABLE"},
+  {"name": "HelpfulnessDenominator", "type": "INTEGER", "mode": "NULLABLE"},
+  {"name": "Score", "type": "INTEGER", "mode": "NULLABLE"},
+  {"name": "Time", "type": "TIMESTAMP", "mode": "NULLABLE"},
+  {"name": "Summary", "type": "STRING", "mode": "NULLABLE"},
+  {"name": "Text", "type": "STRING", "mode": "NULLABLE"},
+  {"name": "sentiment_score", "type": "FLOAT", "mode": "NULLABLE"},
+  {"name": "satisfaction_level", "type": "STRING", "mode": "NULLABLE"}
+]
